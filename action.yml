@@ -1,0 +1,69 @@
+name: "NoctHost ephemeral server"
+description: "Start a cloud server for the length of a job (Vultr, Hetzner, DigitalOcean, Linode) and destroy it when the job ends."
+author: "NoctHost"
+branding:
+  icon: "server"
+  color: "gray-dark"
+
+inputs:
+  api-key:
+    description: "NoctHost API key (nh_...) with the read, deploy and destroy scopes. Store it as a repository secret."
+    required: true
+  plan:
+    description: "Plan id, for example vc2-1c-1gb. See https://nocthost.com/docs/api for the catalog."
+    required: false
+    default: "vc2-1c-1gb"
+  region:
+    description: "Region id, for example ams, fra, nyc."
+    required: false
+    default: "ams"
+  provider:
+    description: "Backend cloud: vultr, hetzner, digitalocean or linode. Empty lets the API pick its default."
+    required: false
+    default: ""
+  os-id:
+    description: "Optional OS id from the catalog. Default is Ubuntu 22.04."
+    required: false
+    default: ""
+  ssh-key:
+    description: "Optional public SSH key installed for root at first boot."
+    required: false
+    default: ""
+  label:
+    description: "Server label. Default: gha-<run id>-<attempt>."
+    required: false
+    default: ""
+  wait-for-ssh:
+    description: "Wait until the SSH port accepts connections before the step finishes."
+    required: false
+    default: "true"
+  ssh-port:
+    description: "Port to check when wait-for-ssh is true."
+    required: false
+    default: "22"
+  timeout:
+    description: "Seconds to wait for the server to become active (and for SSH, if enabled)."
+    required: false
+    default: "600"
+  destroy:
+    description: "Destroy the server in the post step, even if the job failed."
+    required: false
+    default: "true"
+  api-url:
+    description: "API base URL."
+    required: false
+    default: "https://api.nocthost.com"
+
+outputs:
+  server-id:
+    description: "Id of the created server."
+  ip:
+    description: "Public IPv4 address."
+  password:
+    description: "Generated root password (masked in logs)."
+
+runs:
+  using: "node20"
+  main: "src/main.js"
+  post: "src/post.js"
+  post-if: "always()"
