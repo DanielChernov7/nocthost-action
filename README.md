@@ -58,7 +58,7 @@ The server is destroyed in the action's post step. Billing stops the same hour.
 
 - The server id is saved before the action waits for it, so a timeout or a cancelled job still destroys the server.
 - If the destroy call fails five times, the step fails with an error so the leftover server is visible. Delete it in the dashboard.
-- The action has no dependencies and runs on Node 20.
+- The action has no dependencies and runs on Node 24.
 
 Other ways to automate the same API: [Terraform provider](https://registry.terraform.io/providers/DanielChernov7/nocthost/latest), [npm](https://www.npmjs.com/package/nocthost) and [PyPI](https://pypi.org/project/nocthost/) SDKs, and an [MCP server](https://nocthost.com/docs/mcp).
 
